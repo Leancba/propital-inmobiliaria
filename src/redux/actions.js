@@ -1,4 +1,13 @@
-import { GET_CITYS, SELECTED_CITY, FILTER_BY_TYPE, FILTER_BY_PRICE, FILTER_BY_SURFACE } from "./actionTypes";
+import {
+  GET_CITYS,
+  SELECTED_CITY,
+  FILTER_BY_TYPE,
+  FILTER_BY_PRICE,
+  FILTER_BY_SURFACE,
+  FILTER_BY_DELIVERED,
+  APPLY_FILTERS,
+  CLEAR_FILTER,
+} from "./actionTypes";
 
 import axios from "axios";
 
@@ -21,7 +30,6 @@ export const getCitys = () => {
 };
 
 export const selectedCity = (payload) => {
-
   return {
     type: SELECTED_CITY,
     payload,
@@ -29,17 +37,13 @@ export const selectedCity = (payload) => {
 };
 
 export const filterByType = (payload) => {
-
   return {
     type: FILTER_BY_TYPE,
     payload,
   };
 };
 
-
 export const filterByPrice = (payload) => {
-
-
   return {
     type: FILTER_BY_PRICE,
     payload,
@@ -47,9 +51,27 @@ export const filterByPrice = (payload) => {
 };
 
 export const filterBySurface = (payload) => {
-
   return {
     type: FILTER_BY_SURFACE,
     payload,
+  };
+};
+
+export const filterByDelivered = (payload) => {
+  return {
+    type: FILTER_BY_DELIVERED,
+    payload,
+  };
+};
+
+export const ApplyFilters = () => {
+  return {
+    type: APPLY_FILTERS,
+  };
+};
+
+export const ClearFilter = () => {
+  return {
+    type: CLEAR_FILTER,
   };
 };

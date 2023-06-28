@@ -4,15 +4,20 @@ import {
   FILTER_BY_TYPE,
   FILTER_BY_PRICE,
   FILTER_BY_SURFACE,
+  FILTER_BY_DELIVERED,
+  APPLY_FILTERS,
+  CLEAR_FILTER,
 } from "./actionTypes";
 
 const initialState = {
   citys: [],
   selectedCity: null,
   selectedCityCopy: [],
-  selectedCityByFilters: [],
+  type: null,
   price: null,
+  delivered: null,
   surface: null,
+  flag: false,
 };
 
 export default function rootReducer(state = initialState, action) {
@@ -20,7 +25,10 @@ export default function rootReducer(state = initialState, action) {
     case GET_CITYS:
       return {
         ...state,
+        flag: false,
         citys: action.payload,
+        selectedCity: action.payload[0],
+        selectedCityCopy: action.payload[0],
       };
 
     case SELECTED_CITY:
@@ -28,132 +36,82 @@ export default function rootReducer(state = initialState, action) {
         ...state,
         selectedCity: action.payload,
         selectedCityCopy: action.payload,
-        selectedCityByFilters: action.payload,
       };
 
     case FILTER_BY_TYPE:
-      const selectedType = action.payload;
-
-      const filteredType = state.selectedCityCopy.oportunidades.filter(
-        (opportunity) => opportunity.tipo === selectedType
-      );
-
-      if (state.price) {
-        const [minPrice, maxPrice] = state.price;
-
-        const filteredTypeAndPrice = filteredType.filter(
-          (opportunity) =>
-            opportunity.price >= minPrice && opportunity.price <= maxPrice
-        );
-
-        return {
-          ...state,
-          selectedCity: {
-            ...state.selectedCity,
-            oportunidades: filteredTypeAndPrice,
-          },
-          selectedCityByFilters: {
-            ...state.selectedCity,
-            oportunidades: filteredType,
-          },
-        };
-      }
-
-      if (state.surface) {
-        const [minM2, maxM2] = state.surface;
-
-        const filteredTypeAndSurface = filteredType.filter(
-          (opportunity) =>
-            opportunity.superficie >= minM2 && opportunity.superficie <= maxM2
-        );
-
-        return {
-          ...state,
-          selectedCity: {
-            ...state.selectedCity,
-            oportunidades: filteredTypeAndSurface,
-          },
-          selectedCityByFilters: {
-            ...state.selectedCity,
-            oportunidades: filteredType,
-          },
-        };
-      }
-
-
       return {
         ...state,
-        selectedCity: { ...state.selectedCity, oportunidades: filteredType },
-        selectedCityByFilters: {
-          ...state.selectedCity,
-          oportunidades: filteredType,
-        },
+        type: action.payload,
       };
 
     case FILTER_BY_PRICE:
-      const [minPrice, maxPrice] = action.payload;
+      return {
+        ...state,
+        price: action.payload,
+      };
 
-      if (state.selectedCityByFilters) {
-        const filteredPrice = state.selectedCityByFilters.oportunidades.filter(
-          (opportunity) =>
-            opportunity.price >= minPrice && opportunity.price <= maxPrice
-        );
-
-        return {
-          ...state,
-          selectedCity: { ...state.selectedCity, oportunidades: filteredPrice },
-          price: action.payload,
-        };
-      } else {
-        const filteredPrice = state.selectedCityCopy.oportunidades.filter(
-          (opportunity) =>
-            opportunity.price >= minPrice && opportunity.price <= maxPrice
-        );
-
-        return {
-          ...state,
-          selectedCity: { ...state.selectedCity, oportunidades: filteredPrice },
-        };
-      }
+    case FILTER_BY_DELIVERED:
+      return {
+        ...state,
+        delivered: action.payload,
+      };
 
     case FILTER_BY_SURFACE:
-      const [minM2, maxM2] = action.payload;
-      console.log(minM2, maxM2)
-      if (state.selectedCityByFilters) {
+      return {
+        ...state,
+        surface: action.payload,
+      };
 
-        const filteredSurface =
-          state.selectedCityByFilters.oportunidades.filter(
-            (opportunity) =>
-              opportunity.superficie >= minM2 && opportunity.superficie <= maxM2
-          );
+    case APPLY_FILTERS:
+      let filteredOpportunities = state.selectedCityCopy.oportunidades;
 
-        return {
-          ...state,
-          filteredSurface,
-          selectedCity: {
-            ...state.selectedCity,
-            oportunidades: filteredSurface,
-          },
-          surface: action.payload,
-        };
-      } else {
-
-        console.log(filteredSurface)
-        const filteredSurface = state.selectedCityCopy.oportunidades.filter(
-          
-          (opportunity) =>
-            opportunity.superficie >= minM2 && opportunity.superficie <= maxM2
+      if (state.type) {
+        filteredOpportunities = filteredOpportunities.filter(
+          (opportunity) => opportunity.tipo === state.type
         );
-
-        console.log(filteredSurface)
-        return {
-          ...state,
-          selectedCity: {
-            ...state.selectedCity,
-            oportunidades: filteredSurface,
-          },
-        };
       }
+
+      if (state.price && state.price.length === 2) {
+        filteredOpportunities = filteredOpportunities.filter(
+          (opportunity) =>
+            opportunity.price >= state.price[0] &&
+            opportunity.price <= state.price[1]
+        );
+      }
+
+      if (state.surface && state.surface.length === 2) {
+        filteredOpportunities = filteredOpportunities.filter(
+          (opportunity) =>
+            opportunity.superficie >= state.surface[0] &&
+            opportunity.superficie <= state.surface[1]
+        );
+      }
+
+      if (state.delivered) {
+        filteredOpportunities = filteredOpportunities.filter(
+          (opportunity) => opportunity.entrega[0] === state.delivered
+        );
+      }
+
+      let flag = false;
+
+      if (filteredOpportunities.length === 0) {
+        flag = true;
+      }
+
+      return {
+        ...state,
+        selectedCity: {
+          ...state.selectedCity,
+          oportunidades: filteredOpportunities,
+        },
+        flag: flag,
+      };
+
+    case CLEAR_FILTER:
+      return {
+        ...state,
+      };
 
     default:
       return state;

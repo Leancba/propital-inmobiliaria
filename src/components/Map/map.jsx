@@ -8,17 +8,17 @@ import { getCitys } from "../../redux/actions";
 import Parcela from "../../markers/Parcela";
 import Nuevo from "../../markers/Propiedades";
 import Pin from "../../markers/Pin";
-import CITIES from "../../data/cities.json";
 import Propital from "../../assets/Propital.png";
 
-// Cards
+// Componentes
 import Card from "../Cards/Cards";
-
+import { Buttons } from "../Panel/control-panel"
 // Filter
+
 import Filter from "../Filters/Filters";
 
-const MAPBOX_TOKEN =
-  "pk.eyJ1IjoibGVhbmNiYSIsImEiOiJjbGo5YTY1c3ExNzlxM3FxZ3M5ZXQ5NHlqIn0.QinKi3DFID_166VxNwOF1Q";
+const MAPBOX_TOKEN = process.env.REACT_APP_TOKEN;
+
 
 const initialViewState = {
   latitude: -33.437776,
@@ -34,13 +34,17 @@ export default function App() {
   const dispatch = useDispatch();
 
   const selectedCity = useSelector((state) => state.selectedCity);
-  console.log(selectedCity);
+  const citys = useSelector((state) =>state.citys)
+ 
 
   useEffect(() => {
     dispatch(getCitys());
   }, []);
 
   const [popupInfo, setPopupInfo] = useState("");
+
+
+  //desplazamiento del mapa//
 
   if (
     selectedCity &&
@@ -60,9 +64,13 @@ export default function App() {
     });
   }
 
+   //desplazamiento del mapa//
+
+   //marcadores de ciudad
+
   const pins = useMemo(
     () =>
-      CITIES.map((city, index) => (
+    citys.map((city, index) => (
         <Marker
           key={`marker-${index}`}
           longitude={city.longitude}
@@ -77,6 +85,8 @@ export default function App() {
       )),
     []
   );
+
+  //marcadores de oportunidades
 
   const oportunitys = useMemo(
     () =>
@@ -106,11 +116,14 @@ export default function App() {
   return (
     <div style={{ display: "flex" }}>
       <div style={{ width: "30%", height: "100vh" }}>
-        <div style={{ height: "50%" }}>
+        <div style={{ height: "40%" }}>
           <img src={Propital} style={{ width: "100%", height: "100%" }} />
         </div>
         <div style={{ height: "50%", overflow: "auto" }}>
           <Filter setPopupInfo={setPopupInfo} />
+        </div>
+        <div style={{ height: "5%", display: 'flex', justifyContent:'center', marginTop:'15px'}}>
+         <Buttons/>
         </div>
       </div>
       <div style={{ width: "70%", height: "500px" }}>
@@ -123,7 +136,6 @@ export default function App() {
         >
           {pins}
           {oportunitys}
-
           {popupInfo && (
             <Popup
               anchor="center"

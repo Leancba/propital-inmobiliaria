@@ -1,29 +1,42 @@
-import React from "react";
-// import CITIES from '../../data/cities.json'
+//en este archivo vamos a encontrar todos los componentes que se reenderizan en el archivo Filter.jsx
 
+
+import React from "react";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Button from "@mui/material/Button";
 
 import { useSelector, useDispatch } from "react-redux";
-import { selectedCity, filterByType, filterByPrice, filterBySurface } from "../../redux/actions";
+import {
+  selectedCity,
+  filterByType,
+  filterByPrice,
+  filterBySurface,
+  filterByDelivered,
+  ApplyFilters
+} from "../../redux/actions";
 
-export function ControlPanel({setPopupInfo}) {
+export function ControlPanel({ setPopupInfo }) {
   const dispatch = useDispatch();
   const citys = useSelector((state) => state.citys);
 
   const handleChange = (event) => {
-    const selectedCityObj = citys.find((city) => city.city === event.target.value);
-    setPopupInfo(null)
+    const selectedCityObj = citys.find(
+      (city) => city.city === event.target.value
+    );
+    setPopupInfo(null);
     dispatch(selectedCity(selectedCityObj));
   };
 
   return (
     <>
       <RadioGroup
+        defaultValue={"Santiago, Provincia de Santiago"}
         aria-labelledby="control-panel-label"
         name="city"
         onChange={handleChange}
@@ -42,7 +55,6 @@ export function ControlPanel({setPopupInfo}) {
 }
 
 export function FilterType() {
-  
   const dispatch = useDispatch();
 
   const handleChange = (event) => {
@@ -143,5 +155,59 @@ export function FilterSurface() {
         max={100}
       />
     </Box>
+  );
+}
+
+export function FilterDelivered() {
+  const dispatch = useDispatch();
+
+  const handleChange = (event) => {
+    dispatch(filterByDelivered(event.target.value));
+  };
+
+  return (
+    <>
+      <FormControl>
+        <RadioGroup
+          aria-labelledby="demo-radio-buttons-group-label"
+          name="radio-buttons-group"
+          onChange={handleChange}
+        >
+          <FormControlLabel
+            value="Entrega Futura"
+            control={<Radio />}
+            label="Entrega Futura"
+          />
+          <FormControlLabel
+            value="Inmediata"
+            control={<Radio />}
+            label="Inmediata"
+          />
+          <FormControlLabel
+            value="Pronta Entrega"
+            control={<Radio />}
+            label="Pronta Entrega"
+          />
+        </RadioGroup>
+      </FormControl>
+    </>
+  );
+}
+
+export function Buttons() {
+  const dispatch = useDispatch();
+
+  const handleChange = () => {
+    dispatch(ApplyFilters());
+  };
+
+  return (
+    <ButtonGroup
+      disableElevation
+      variant="contained"
+      aria-label="Disabled elevation buttons"
+    >
+      <Button onClick={handleChange}>Aplicar Filtros</Button>
+    </ButtonGroup>
   );
 }

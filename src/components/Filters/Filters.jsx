@@ -5,14 +5,14 @@ import MuiAccordion from "@mui/material/Accordion";
 import MuiAccordionSummary from "@mui/material/AccordionSummary";
 import MuiAccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-
-import { useSelector} from "react-redux";
-
+import { useSelector } from "react-redux";
+//Componentes que se reenderizan en los acordeones de filtrado
 import {
   ControlPanel,
   FilterType,
   FilterPrice,
   FilterSurface,
+  FilterDelivered,
 } from "../Panel/control-panel";
 
 const Accordion = styled((props) => (
@@ -51,8 +51,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: "1px solid rgba(0, 0, 0, .125)",
 }));
 
-export default function CustomizedAccordions({setPopupInfo}) {
-
+export default function CustomizedAccordions({ setPopupInfo }) {
   const Selected = useSelector((state) => state.selectedCity);
 
   const [expanded, setExpanded] = React.useState("");
@@ -77,21 +76,33 @@ export default function CustomizedAccordions({setPopupInfo}) {
         </AccordionDetails>
       </Accordion>
       <Accordion
-        disabled= {!Selected}
+        disabled={!Selected}
         expanded={expanded === "panel2"}
         onChange={handleChange("panel2")}
       >
         <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-          <Typography>Tipo de propiedades</Typography>
+          <Typography>Tipo de Propiedades</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <FilterType />
         </AccordionDetails>
       </Accordion>
       <Accordion
-        disabled= {!Selected}
+        disabled={!Selected}
         expanded={expanded === "panel3"}
         onChange={handleChange("panel3")}
+      >
+        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
+          <Typography>Tipo de Entrega</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <FilterDelivered />
+        </AccordionDetails>
+      </Accordion>
+      <Accordion
+        disabled={!Selected}
+        expanded={expanded === "panel4"}
+        onChange={handleChange("panel4")}
       >
         <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
           <Typography>Precio</Typography>
@@ -101,9 +112,9 @@ export default function CustomizedAccordions({setPopupInfo}) {
         </AccordionDetails>
       </Accordion>
       <Accordion
-        disabled= {!Selected}
-        expanded={expanded === "panel4"}
-        onChange={handleChange("panel4")}
+        disabled={!Selected}
+        expanded={expanded === "panel5"}
+        onChange={handleChange("panel5")}
       >
         <AccordionSummary aria-controls="panel4d-content" id="panel4d-header">
           <Typography>Superficie</Typography>
