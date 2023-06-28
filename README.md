@@ -1,9 +1,9 @@
-# Getting Started with Create React App
+Propital Inmobiliaria (Challenge técnico)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Dicho repositorio representa lo solicitado por el cliente, un sistema de visualización de proyectos inmobiliarios en un mapa interactivo el cual el mismo esta dessarrollado utilizando como lenguaje principal Javascript,  React como framework , Redux como contenedor de estados para almacenar la solicitud a la API (creada en Mocky), y los estados para filtrar y modificar la parte interactiva del mapa y Material UI como biblioteca de componentes de para la interfaz de usuario
 
-## Available Scripts
-
+Como ejecutar "propital-inmobiliaria" de manera local
+ 
 In the project directory, you can run:
 
 ### `npm start`
