@@ -17,7 +17,7 @@ import { Buttons } from "../Panel/control-panel"
 
 import Filter from "../Filters/Filters";
 
-const MAPBOX_TOKEN = process.env.REACT_APP_TOKEN;
+const MAPBOX_TOKEN = process.env.REACT_APP_TOKEN || "pk.eyJ1IjoibGVhbmNiYSIsImEiOiJjbGo5YTY1c3ExNzlxM3FxZ3M5ZXQ5NHlqIn0.QinKi3DFID_166VxNwOF1Q"
 
 
 const initialViewState = {
